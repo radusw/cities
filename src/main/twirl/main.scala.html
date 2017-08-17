@@ -1,0 +1,38 @@
+@(info: api.Api.Info)
+<!DOCTYPE html>
+<html>
+<title>@info.city</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, sans-serif}
+h1 {letter-spacing: 6px}
+td {padding: 0 20px 0 20px}
+</style>
+<body>
+
+<div class="content" style="max-width:1500px">
+    <center>
+        <table><tr>
+            <td>
+                <table>
+                    <tr><h1>@info.weatherInfo.map(_.weather.head.description).getOrElse("N/A")</h1></tr>
+                    <tr><h5>@info.weatherInfo.map(_.main.temp).getOrElse("N/A") deg</h5></tr>
+                </table>
+            </td>
+            <td>
+                <table>
+                    <tr><h5>@info.city, @info.countryInfo.map(_.name).getOrElse("N/A")</h5></tr>
+                    <tr><h5>Currency: @info.countryInfo.map(_.currencies.head.code).getOrElse("N/A")
+                        (@info.countryInfo.map(_.currencies.head.symbol).getOrElse("N/A"))</h5></tr>
+                </table>
+            </td>
+        </tr></table>
+    </center>
+
+</div>
+
+</body>
+</html>
