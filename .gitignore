@@ -2,3 +2,6 @@
 *.log
 project/target
 target
+frontend/elm/elm-stuff
+logs
+frontend/elm/main.js
