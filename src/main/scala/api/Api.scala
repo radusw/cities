@@ -6,6 +6,7 @@ import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import model.{CountryInfo, WeatherInfo}
 import services.{CountryService, WeatherService}
+import scala.language.higherKinds
 
 class Api {
   import Api._

@@ -11,6 +11,7 @@ import io.circe.parser._
 import model.{Error, WeatherInfo}
 import monix.cats._
 import monix.eval.Task
+import scala.language.higherKinds
 
 
 trait WeatherService[F[_]] {
