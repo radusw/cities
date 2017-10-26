@@ -1,10 +1,10 @@
 import sbt._
 
 object Dependencies {
-  val akkaV      = "2.4.16"
-  val akkaHttpV  = "10.0.7"
+  val akkaV      = "2.4.19"
+  val akkaHttpV  = "10.0.10"
   val circeV     = "0.8.0"
-  val akkaCirceV = "1.17.0"
+  val akkaCirceV = "1.18.0"
   val scalaTestV = "3.0.1"
   val logbackV   = "1.1.8"
   val configV    = "1.3.1"

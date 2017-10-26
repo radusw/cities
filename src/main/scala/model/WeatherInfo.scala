@@ -11,13 +11,13 @@ object WeatherInfo {
 }
 
 final case class MainInfo(
-  grnd_level: Option[BigDecimal],
-  humidity: BigDecimal,
-  pressure: BigDecimal,
-  sea_level: Option[BigDecimal],
-  temp: BigDecimal,
-  temp_min: BigDecimal,
-  temp_max: BigDecimal
+    grnd_level: Option[BigDecimal],
+    humidity: BigDecimal,
+    pressure: BigDecimal,
+    sea_level: Option[BigDecimal],
+    temp: BigDecimal,
+    temp_min: BigDecimal,
+    temp_max: BigDecimal
 )
 
 final case class Weather(main: String, description: String, id: Int, icon: String)

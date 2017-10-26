@@ -12,14 +12,12 @@ import monix.cats._
 import monix.eval.Task
 import scala.language.higherKinds
 
-
 trait CountryService[F[_]] {
   def fetchCountry(city: String): F[Either[Error, CountryInfo]]
 }
 
-final class CountryServiceInterpreter(implicit
-  system: ActorSystem,
-  mat: ActorMaterializer) extends CountryService[Task] {
+final class CountryServiceInterpreter(implicit system: ActorSystem, mat: ActorMaterializer)
+    extends CountryService[Task] {
 
   import config.AppConfig.config
   implicit val log = Logging(system, this.getClass)
@@ -43,4 +41,3 @@ final class CountryServiceInterpreter(implicit
     result.value
   }
 }
-

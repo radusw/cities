@@ -13,29 +13,23 @@ import scala.util.{Failure, Success}
 
 package object services {
 
-  private def retryBackoff[A](
-    source: Task[A],
-    maxRetries: Int,
-    firstDelay: FiniteDuration)(implicit log: LoggingAdapter): Task[A] = {
+  private def retryBackoff[A](source: Task[A], maxRetries: Int, firstDelay: FiniteDuration)(
+      implicit log: LoggingAdapter): Task[A] = {
 
     source.onErrorHandleWith {
       case ex: Exception =>
         if (maxRetries > 0) {
           log.info(s"$ex: Retrying (${maxRetries - 1})... ")
           retryBackoff(source, maxRetries - 1, firstDelay * 2).delayExecution(firstDelay)
-        }
-        else {
+        } else {
           Task.raiseError(ex)
         }
     }
   }
 
   def fetchResource(
-    request: HttpRequest
-  )(implicit
-    system: ActorSystem,
-    mat: ActorMaterializer,
-    log: LoggingAdapter): Task[Either[Error, ByteString]] = {
+      request: HttpRequest
+  )(implicit system: ActorSystem, mat: ActorMaterializer, log: LoggingAdapter): Task[Either[Error, ByteString]] = {
 
     val task = Task.deferFuture(Http().singleRequest(request))
     val taskWithExponentialBackoff = retryBackoff(task, 5, 2.seconds)
@@ -43,8 +37,7 @@ package object services {
       case Success(response) =>
         if (response.status == StatusCodes.OK) {
           Task.fromFuture {
-            response.entity
-              .dataBytes
+            response.entity.dataBytes
               .runWith(Sink.fold(Left(Error("")): Either[Error, ByteString]) { (acc, b) =>
                 acc match {
                   case Left(_) => Right(b)
@@ -52,8 +45,7 @@ package object services {
                 }
               })
           }
-        }
-        else {
+        } else {
           Task.now(Left(Error(response.toString)))
         }
 

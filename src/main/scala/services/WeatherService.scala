@@ -13,14 +13,12 @@ import monix.cats._
 import monix.eval.Task
 import scala.language.higherKinds
 
-
 trait WeatherService[F[_]] {
   def fetchWeather(city: String): F[Either[Error, WeatherInfo]]
 }
 
-final class WeatherServiceInterpreter(implicit
-  system: ActorSystem,
-  mat: ActorMaterializer) extends WeatherService[Task] {
+final class WeatherServiceInterpreter(implicit system: ActorSystem, mat: ActorMaterializer)
+    extends WeatherService[Task] {
 
   import config.AppConfig.config
   implicit val log = Logging(system, this.getClass)

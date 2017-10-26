@@ -7,6 +7,7 @@ import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
+
 import scala.util.Try
 
 object Main extends App {
@@ -19,21 +20,28 @@ object Main extends App {
   val route = {
     import Programs.{programT, htmlProgramT}
 
-    pathPrefix("api") {
+    pathPrefix("version") {
       import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
-      get {
-        pathEndOrSingleSlash {
-          complete(programT(config.defaultCity))
-        } ~
-          path(Segment) { city =>
-            complete(programT(city))
-          }
+      pathEndOrSingleSlash {
+        get {
+          complete(io.circe.parser.parse(api.BuildInfo.toJson))
+        }
       }
     } ~
+      pathPrefix("api") {
+        import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
+        get {
+          pathEndOrSingleSlash {
+            complete(programT(config.defaultCity))
+          } ~
+            path(Segment) { city =>
+              complete(programT(city))
+            }
+        }
+      } ~
       pathPrefix("elm") {
         val extPattern = """(.*)[.](.*)""".r
         val elmResDir = Paths.get(s"frontend/elm/")
-
         pathEnd {
           val page = elmResDir.resolve("index.html")
           val byteArray = Files.readAllBytes(page)
@@ -47,19 +55,18 @@ object Main extends App {
                 case _ => ""
               }
               val byteArray = Files.readAllBytes(res)
-              complete(HttpResponse(
-                StatusCodes.OK,
-                entity = HttpEntity(ContentType(MediaTypes.forExtension(ext), () => HttpCharsets.`UTF-8`), byteArray)
-              ))
-            }
-            else {
+              complete(
+                HttpResponse(
+                  StatusCodes.OK,
+                  entity = HttpEntity(ContentType(MediaTypes.forExtension(ext), () => HttpCharsets.`UTF-8`), byteArray)
+                ))
+            } else {
               complete(HttpResponse(StatusCodes.NotFound, entity = "w00t"))
             }
           }
       } ~
       get {
         import util.TwirlSupport._
-
         pathEndOrSingleSlash {
           val page = htmlProgramT(config.defaultCity)
           complete(page)

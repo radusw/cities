@@ -12,9 +12,8 @@ class Api {
   import Api._
 
   def program[F[_]: Monad](city: String)(
-    implicit
-    W: WeatherService[F],
-    C: CountryService[F],
+      implicit W: WeatherService[F],
+      C: CountryService[F]
   ): F[Either[model.Error, Info]] = {
 
     import W._, C._

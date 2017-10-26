@@ -1,21 +1,19 @@
 import com.typesafe.sbt.packager.docker._
-
 import Dependencies._
 
 lazy val root = (project in file("."))
-  .settings(commonSettings)
-  .settings(dockerSettings)
-  .enablePlugins(AshScriptPlugin)
-  .enablePlugins(SbtTwirl)
+  .enablePlugins(BuildInfoPlugin, AshScriptPlugin, SbtTwirl)
+  .settings(commonSettings ++ buildInfoSettings ++ dockerSettings)
 
 lazy val commonSettings = Seq(
   organization := "eu.radusw",
-  scalaVersion := "2.12.3",
-  version      := "1.0",
-  name         := "city-info",
+  scalaVersion := "2.12.4",
+  version := "1.0",
+  name := "city-info",
   resolvers ++= projectResolvers,
   libraryDependencies ++= dependencies,
   scalacOptions ++= compileSettings,
+  scalafmtOnCompile := true,
   fork in run := true,
   fork in Test := true,
   fork in testOnly := true,
@@ -23,7 +21,8 @@ lazy val commonSettings = Seq(
   javaOptions in run ++= forkedJvmOption,
   javaOptions in Test ++= forkedJvmOption,
   mappings in Universal ++= (baseDirectory.value / "conf" * "*").get.map(x => x -> ("conf/" + x.getName)),
-  mappings in Universal ++= (baseDirectory.value / "frontend" / "elm" * "*").get.map(x => x -> ("frontend/elm/" + x.getName)),
+  mappings in Universal ++= (baseDirectory.value / "frontend" / "elm" * "*").get.map(x =>
+    x -> ("frontend/elm/" + x.getName)),
   javaOptions in Universal ++= Seq(
     "-server",
     "-Dfile.encoding=UTF8",
@@ -40,9 +39,9 @@ lazy val commonSettings = Seq(
   )
 )
 
-
 lazy val compileSettings = Seq(
-  "-encoding", "UTF-8",
+  "-encoding",
+  "UTF-8",
   "-unchecked",
   "-deprecation",
   "-feature",
@@ -92,6 +91,12 @@ lazy val forkedJvmOption = Seq(
   "-XX:+UseCompressedOops"
 )
 
+lazy val buildInfoSettings = Seq(
+  buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+  buildInfoPackage := "api",
+  buildInfoOptions += BuildInfoOption.ToJson,
+  buildInfoOptions += BuildInfoOption.BuildTime
+)
 
 lazy val dockerSettings = Seq(
   dockerUpdateLatest := true,
@@ -105,7 +110,6 @@ lazy val dockerSettings = Seq(
     ExecCmd("ENTRYPOINT", "bin/city-info", "conf/docker.conf")
   ),
   dockerExposedPorts := Seq(9000),
-
   version in Docker := version.value,
   maintainer in Docker := "Radu Gancea <radu.gancea@gmail.com>",
   dockerRepository := Some("radusw")

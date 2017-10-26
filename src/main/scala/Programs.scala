@@ -19,18 +19,22 @@ object Programs {
   implicit val countryService = new CountryServiceInterpreter
 
   implicit val blockingOpsScheduler = Scheduler.io()
-  
+
   val api = new Api()
   val programT = (city: String) =>
-    api.program[Task](city).runAsync
+    api
+      .program[Task](city)
+      .runAsync
       .map {
         case Right(d) =>
           StatusCodes.OK -> d.asJson
         case Left(err) =>
           StatusCodes.BadRequest -> err.msg.asJson
-      }
+    }
   val htmlProgramT = (city: String) =>
-    api.program[Task](city).runAsync
+    api
+      .program[Task](city)
+      .runAsync
       .map {
         case Right(d) => d
         case Left(err) =>

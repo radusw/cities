@@ -3,7 +3,7 @@ package util
 import akka.http.scaladsl.marshalling.{Marshaller, ToEntityMarshaller}
 import akka.http.scaladsl.model.MediaTypes._
 import akka.http.scaladsl.model.MediaType
-import play.twirl.api.{ Xml, Txt, Html }
+import play.twirl.api.{Xml, Txt, Html}
 
 object TwirlSupport extends TwirlSupport
 
