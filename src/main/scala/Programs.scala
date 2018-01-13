@@ -5,7 +5,6 @@ import akka.stream.ActorMaterializer
 import api.Api
 import api.Api.Info
 import io.circe.syntax._
-import monix.cats._
 import monix.eval.Task
 import monix.execution.Scheduler
 import services.{CountryServiceInterpreter, WeatherServiceInterpreter}

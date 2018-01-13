@@ -8,7 +8,6 @@ import cats.data.EitherT
 import cats.syntax.either._
 import io.circe.parser._
 import model.{Error, CountryInfo}
-import monix.cats._
 import monix.eval.Task
 import scala.language.higherKinds
 

@@ -3,13 +3,13 @@ import sbt._
 object Dependencies {
   val akkaV      = "2.4.20"
   val akkaHttpV  = "10.0.11"
-  val circeV     = "0.8.0"
-  val akkaCirceV = "1.18.0"
+  val circeV     = "0.9.0"
+  val akkaCirceV = "1.19.0"
   val scalaTestV = "3.0.1"
   val logbackV   = "1.2.3"
   val configV    = "1.3.2"
   val timeV      = "2.18.0"
-  val monixV     = "2.3.2"
+  val monixV     = "3.0.0-M3"
   val pureConfV  = "0.9.0"
 
 
@@ -26,7 +26,6 @@ object Dependencies {
     "com.typesafe.akka"      %% "akka-http"             % akkaHttpV,
     "de.heikoseeberger"      %% "akka-http-circe"       % akkaCirceV,
     "io.monix"               %% "monix"                 % monixV,
-    "io.monix"               %% "monix-cats"            % monixV,
     "io.circe"               %% "circe-core"            % circeV,
     "io.circe"               %% "circe-generic"         % circeV,
     "io.circe"               %% "circe-parser"          % circeV,
