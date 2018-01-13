@@ -40,7 +40,7 @@ package object services {
             response.entity.dataBytes
               .runWith(Sink.fold(Left(Error("")): Either[Error, ByteString]) { (acc, b) =>
                 acc match {
-                  case Left(_) => Right(b)
+                  case Left(_)  => Right(b)
                   case Right(a) => Right(a ++ b)
                 }
               })

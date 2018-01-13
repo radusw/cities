@@ -23,6 +23,8 @@ lazy val commonSettings = Seq(
   mappings in Universal ++= (baseDirectory.value / "conf" * "*").get.map(x => x -> ("conf/" + x.getName)),
   mappings in Universal ++= (baseDirectory.value / "frontend" / "elm" * "*").get.map(x =>
     x -> ("frontend/elm/" + x.getName)),
+  mappings in Universal ++= (baseDirectory.value / "frontend" / "vue" * "*").get.map(x =>
+    x -> ("frontend/vue/" + x.getName)),
   javaOptions in Universal ++= Seq(
     "-server",
     "-Dfile.encoding=UTF8",

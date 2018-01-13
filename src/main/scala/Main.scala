@@ -1,4 +1,4 @@
-import java.nio.file.{Files, Paths}
+import java.nio.file.{Files, Path, Paths}
 
 import akka.actor.ActorSystem
 import akka.event.Logging
@@ -40,30 +40,10 @@ object Main extends App {
         }
       } ~
       pathPrefix("elm") {
-        val extPattern = """(.*)[.](.*)""".r
-        val elmResDir = Paths.get(s"frontend/elm/")
-        pathEnd {
-          val page = elmResDir.resolve("index.html")
-          val byteArray = Files.readAllBytes(page)
-          complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`text/html(UTF-8)`, byteArray)))
-        } ~
-          path(Segment) { resource =>
-            val res = elmResDir.resolve(resource)
-            if (res.getParent == elmResDir && Files.exists(res) && !Files.isDirectory(res)) {
-              val ext = res.getFileName.toString match {
-                case extPattern(_, extGroup) => extGroup
-                case _ => ""
-              }
-              val byteArray = Files.readAllBytes(res)
-              complete(
-                HttpResponse(
-                  StatusCodes.OK,
-                  entity = HttpEntity(ContentType(MediaTypes.forExtension(ext), () => HttpCharsets.`UTF-8`), byteArray)
-                ))
-            } else {
-              complete(HttpResponse(StatusCodes.NotFound, entity = "w00t"))
-            }
-          }
+        customFrontend(Paths.get(s"frontend/elm/"))
+      } ~
+      pathPrefix("vue") {
+        customFrontend(Paths.get(s"frontend/vue/"))
       } ~
       get {
         import util.TwirlSupport._
@@ -75,6 +55,32 @@ object Main extends App {
             val page = htmlProgramT(city)
             complete(page)
           }
+      }
+  }
+
+  private def customFrontend(resDir: Path): Route = {
+    val extPattern = """(.*)[.](.*)""".r
+    pathEnd {
+      val page = resDir.resolve("index.html")
+      val byteArray = Files.readAllBytes(page)
+      complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`text/html(UTF-8)`, byteArray)))
+    } ~
+      path(Segment) { resource =>
+        val res = resDir.resolve(resource)
+        if (res.getParent == resDir && Files.exists(res) && !Files.isDirectory(res)) {
+          val ext = res.getFileName.toString match {
+            case extPattern(_, extGroup) => extGroup
+            case _                       => ""
+          }
+          val byteArray = Files.readAllBytes(res)
+          complete(
+            HttpResponse(
+              StatusCodes.OK,
+              entity = HttpEntity(ContentType(MediaTypes.forExtension(ext), () => HttpCharsets.`UTF-8`), byteArray)
+            ))
+        } else {
+          complete(HttpResponse(StatusCodes.NotFound, entity = "w00t"))
+        }
       }
   }
 

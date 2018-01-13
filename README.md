@@ -8,4 +8,7 @@ $docker logs cities --follow
 $curl http://localhost:9000/api/London
 ```
 
-Open the browser and go to `http://localhost:9000/elm` for Elm FE or `http://localhost:9000/<city e.g. /Bucharest>` for Twirl FE
+Open the browser and go to:
+ * `http://localhost:9000/elm` for Elm frontend or
+ * `http://localhost:9000/vue` for VueJs frontend or
+ * `http://localhost:9000/<city e.g. /Bucharest>` for Twirl frontend

@@ -1,16 +1,16 @@
 import sbt._
 
 object Dependencies {
-  val akkaV      = "2.4.19"
-  val akkaHttpV  = "10.0.10"
+  val akkaV      = "2.4.20"
+  val akkaHttpV  = "10.0.11"
   val circeV     = "0.8.0"
   val akkaCirceV = "1.18.0"
   val scalaTestV = "3.0.1"
-  val logbackV   = "1.1.8"
-  val configV    = "1.3.1"
-  val timeV      = "2.16.0"
-  val monixV     = "2.3.0"
-  val pureConfV  = "0.7.2"
+  val logbackV   = "1.2.3"
+  val configV    = "1.3.2"
+  val timeV      = "2.18.0"
+  val monixV     = "2.3.2"
+  val pureConfV  = "0.9.0"
 
 
   lazy val projectResolvers = Seq.empty
