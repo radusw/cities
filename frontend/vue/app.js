@@ -4,9 +4,17 @@ var app = new Vue({
         city: 'Bucharest',
         model: {
             countryInfo: {
-                name: ''
+              name: '',
+              population: 0,
+              area: 0,
+              gini: 0,
+              capital: '',
+              subregion: '',
+              flag: '',
+              currencies: [{}]
             },
             weatherInfo: {
+                weather: [{}],
                 main: {
                     temp: ''
                 }
@@ -18,14 +26,15 @@ var app = new Vue({
             this.city = 'Bucharest'
             this.fetch(this.city)
         },
-        fetch: function (city) {
-            this.$http.get('/api/' + city).then(response => {
-                console.log(response.body)
-                this.model = response.body
-            }, response => {
-                // on err
+        fetch: _.debounce(function (city) {
+          var vm = this
+          axios
+            .get('/api/' + city)
+            .then(response => {
+              vm.model = response.data
             })
-        }
+            .catch(error => console.log(error))
+        }, 500)
     },
     watch: {
         'city': function(newVal, oldVal) {
